@@ -11,6 +11,17 @@ export default defineConfig([
     extends: ["js/recommended"]
   },
   {
+    overrides: [
+      {
+        files: ["tests/**/*"],
+        plugins: ["jest"],
+        env: {
+          "jest/globals": true
+        }
+      }
+    ]
+  },
+  {
     files: ["**/*.{js,mjs,cjs,ts}"],
     languageOptions: { globals: globals.node }
   },
