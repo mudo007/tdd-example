@@ -11,7 +11,8 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
           "source.fixAll.eslint": "always"
-        }
+        },
+        "eslint.validate": ["typescript"]
       },
       "extensions": [
         "dbaeumer.vscode-eslint",
