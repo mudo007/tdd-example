@@ -1,0 +1,32 @@
+{
+  "name": "Node Dev Container",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.autoSave": "onFocusChange",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "always"
+        }
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+  "mounts": [
+    "source=/run/host-services/ssh-auth.sock,target=/run/host-services/ssh-auth.sock,type=bind",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig_mounted,type=bind"
+  ],
+  "containerEnv": {
+    "SSH_AUTH_SOCK": "/run/host-services/ssh-auth.sock"
+  },
+  "postCreateCommand": "cp /home/node/.gitconfig_mounted /home/node/.gitconfig && git config --global --unset gpg.ssh.program",
+  "postStartCommand": "npm install"
+}
