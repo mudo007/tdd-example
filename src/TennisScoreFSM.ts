@@ -25,10 +25,15 @@ export class TennisScoreFSM {
       case "earlyGame":
         return `${getIndividualScoreName(this.#playerScore.playerA)}-${getIndividualScoreName(this.#playerScore.playerB)}`;
       case "endGame":
-        return `${this.#playerScore.playerA > this.#playerScore.playerB ? "playerA" : "playerB"} wins! game over`;
+        return `${this.getLeadScorer()} wins! game over`;
       default:
-        return "invalid";
+        return this.#scoreFSMstate;
     }
+  }
+  private getLeadScorer(): keyof Scores {
+    return this.#playerScore.playerA > this.#playerScore.playerB
+      ? "playerA"
+      : "playerB";
   }
 
   public scoreForPlayer(player: keyof Scores): void {
@@ -36,8 +41,13 @@ export class TennisScoreFSM {
     this.runScoringFSM(player);
   }
 
-  public setScoreValues(playerAScore: number, playerBScore: number): void {
+  public setScoreValuesAndState(
+    playerAScore: number,
+    playerBScore: number,
+    desiredState: string
+  ): void {
     this.#playerScore = { playerA: playerAScore, playerB: playerBScore };
+    this.#scoreFSMstate = desiredState;
   }
 
   private runScoringFSM(player: keyof Scores): void {
@@ -48,6 +58,19 @@ export class TennisScoreFSM {
           Math.abs(this.#playerScore.playerA - this.#playerScore.playerB) >= 2
         )
           this.#scoreFSMstate = "endGame";
+
+        //Transitioning to deuce
+        if (this.#playerScore.playerA === 3 && this.#playerScore.playerB === 3)
+          this.#scoreFSMstate = "deuce";
+        break;
+      case "deuce":
+        this.#scoreFSMstate = `advantage-${player}`;
+        break;
+      case "advantage-playerA":
+        if (player === "playerB") this.#scoreFSMstate = "deuce";
+        break;
+      case "advantege-playerB":
+        if (player === "playerA") this.#scoreFSMstate = "deuce";
         break;
       case "endGame":
         break;

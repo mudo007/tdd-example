@@ -47,7 +47,7 @@ describe("Running Score during early stage", () => {
   });
   it("Should return forty-fifteen for score Values of 3-1", () => {
     // Act
-    tenisSccorerFSM.setScoreValues(3, 1);
+    tenisSccorerFSM.setScoreValuesAndState(3, 1, "earlyGame");
 
     // Assert
     expect(tenisSccorerFSM.getRunningScore()).toEqual("forty-fifteen");
@@ -55,7 +55,7 @@ describe("Running Score during early stage", () => {
 
   it("Should end the game with playerA winning if it scores after the running score is forty-love", () => {
     // Arrange
-    tenisSccorerFSM.setScoreValues(3, 0);
+    tenisSccorerFSM.setScoreValuesAndState(3, 0, "earlyGame");
     // Act
     tenisSccorerFSM.scoreForPlayer("playerA");
     // Assert
@@ -65,12 +65,44 @@ describe("Running Score during early stage", () => {
   });
   it("Should end the game with playerA winning if it scores after the running score is forty-thirty", () => {
     // Arrange
-    tenisSccorerFSM.setScoreValues(3, 2);
+    tenisSccorerFSM.setScoreValuesAndState(3, 2, "earlyGame");
     // Act
     tenisSccorerFSM.scoreForPlayer("playerA");
     // Assert
     expect(tenisSccorerFSM.getRunningScore()).toEqual(
       "playerA wins! game over"
     );
+  });
+});
+
+describe("Running score when deuce is reached", () => {
+  // Common Arrange
+  let tenisSccorerFSM: TennisScoreFSM;
+  beforeEach(() => {
+    tenisSccorerFSM = new TennisScoreFSM();
+  });
+  it("Should be deuce after playerA scoring when the runnig score was thirty-forty", () => {
+    // Arrange
+    tenisSccorerFSM.setScoreValuesAndState(2, 3, "earlyGame");
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerA");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("deuce");
+  });
+  it("Should be advantege-playerA when playerA scores from a deuce", () => {
+    // Arrange
+    tenisSccorerFSM.setScoreValuesAndState(3, 3, "deuce");
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerA");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("advantage-playerA");
+  });
+  it("Should be deuce when playerB scores from a advantege-playerA", () => {
+    // Arrange
+    tenisSccorerFSM.setScoreValuesAndState(5, 3, "advantage-playerA");
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerB");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("deuce");
   });
 });
