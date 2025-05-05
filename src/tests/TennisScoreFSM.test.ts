@@ -1,4 +1,4 @@
-import { getIndividualScoreName } from "../TennisScoreFSM";
+import { getIndividualScoreName, TennisScoreFSM } from "../TennisScoreFSM";
 
 describe("Individual score names", () => {
   it("Should return love for an individual score of 0", () => {
@@ -16,5 +16,33 @@ describe("Individual score names", () => {
   });
   it("Should return forty for an individual score of 3", () => {
     expect(getIndividualScoreName(3)).toEqual("forty");
+  });
+});
+
+describe("Running Score during early stage", () => {
+  // Common Arrange
+  let tenisSccorerFSM: TennisScoreFSM;
+  beforeEach(() => {
+    tenisSccorerFSM = new TennisScoreFSM();
+  });
+
+  it("Should return love-love at the beginning", () => {
+    // Act
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("love-love");
+  });
+
+  it("Should return fifteen-love after Player A scores first", () => {
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerA");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("fifteen-love");
+  });
+
+  it("Should return love-fifteen after Player B scores first", () => {
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerB");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("love-fifteen");
   });
 });

@@ -12,3 +12,18 @@ export function getIndividualScoreName(playerScoreValue: number): string {
       return "invalid";
   }
 }
+
+export class TennisScoreFSM {
+  #playerScore: Scores = {
+    playerA: 0,
+    playerB: 0
+  };
+
+  public getRunningScore(): string {
+    return `${getIndividualScoreName(this.#playerScore.playerA)}-${getIndividualScoreName(this.#playerScore.playerB)}`;
+  }
+
+  public scoreForPlayer(player: keyof Scores): void {
+    this.#playerScore[player]++;
+  }
+}
