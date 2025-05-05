@@ -68,9 +68,11 @@ export class TennisScoreFSM {
         break;
       case "advantage-playerA":
         if (player === "playerB") this.#scoreFSMstate = "deuce";
+        else this.#scoreFSMstate = "endGame";
         break;
-      case "advantege-playerB":
+      case "advantage-playerB":
         if (player === "playerA") this.#scoreFSMstate = "deuce";
+        else this.#scoreFSMstate = "endGame";
         break;
       case "endGame":
         break;

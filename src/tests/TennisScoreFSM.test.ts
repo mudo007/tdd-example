@@ -106,3 +106,31 @@ describe("Running score when deuce is reached", () => {
     expect(tenisSccorerFSM.getRunningScore()).toEqual("deuce");
   });
 });
+
+describe("Winning the game from advantage", () => {
+  // Common Arrange
+  let tenisSccorerFSM: TennisScoreFSM;
+  beforeEach(() => {
+    tenisSccorerFSM = new TennisScoreFSM();
+  });
+  it("Running Score should be playerA wins! game over, when playerA scores from advantage-playerA", () => {
+    // Arrange
+    tenisSccorerFSM.setScoreValuesAndState(5, 4, "advantage-playerA");
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerA");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual(
+      "playerA wins! game over"
+    );
+  });
+  it("Running Score should be playerB wins! game over, when playerB scores from advantage-playerB", () => {
+    // Arrange
+    tenisSccorerFSM.setScoreValuesAndState(5, 6, "advantage-playerB");
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerB");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual(
+      "playerB wins! game over"
+    );
+  });
+});
