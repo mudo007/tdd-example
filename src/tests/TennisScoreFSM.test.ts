@@ -45,7 +45,24 @@ describe("Running Score during early stage", () => {
     // Assert
     expect(tenisSccorerFSM.getRunningScore()).toEqual("love-fifteen");
   });
+  it("Should return forty-fifteen for score Values of 3-1", () => {
+    // Act
+    tenisSccorerFSM.setScoreValues(3, 1);
 
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual("forty-fifteen");
+  });
+
+  it("Should end the game with playerA winning if it scores after the running score is forty-love", () => {
+    // Arrange
+    tenisSccorerFSM.setScoreValues(3, 0);
+    // Act
+    tenisSccorerFSM.scoreForPlayer("playerA");
+    // Assert
+    expect(tenisSccorerFSM.getRunningScore()).toEqual(
+      "playerA wins! game over"
+    );
+  });
   it("Should end the game with playerA winning if it scores after the running score is forty-thirty", () => {
     // Arrange
     tenisSccorerFSM.setScoreValues(3, 2);
